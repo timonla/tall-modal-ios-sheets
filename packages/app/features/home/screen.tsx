@@ -9,11 +9,11 @@ import {
   SwitchThemeButton,
   useToastController,
   XStack,
-  YStack
+  YStack,
 } from '@my/ui'
 import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons'
-import { useState } from 'react'
-import { Platform } from 'react-native'
+import { useEffect, useState } from 'react'
+import { Platform, ScrollView } from 'react-native'
 import { useLink } from 'solito/navigation'
 
 export function HomeScreen({ pagesMode = false }: { pagesMode?: boolean }) {
@@ -23,7 +23,7 @@ export function HomeScreen({ pagesMode = false }: { pagesMode?: boolean }) {
   })
 
   return (
-    <YStack flex={1} justify="center" items="center" gap="$8" p="$4" bg="$background">      
+    <YStack flex={1} justify="center" items="center" gap="$8" p="$4" bg="$background">
       <XStack
         position="absolute"
         width="100%"
@@ -65,8 +65,9 @@ export function HomeScreen({ pagesMode = false }: { pagesMode?: boolean }) {
 function SheetDemo() {
   const toast = useToastController()
 
+  const longArray = new Array(50).fill(0)
+
   const [open, setOpen] = useState(false)
-  const [position, setPosition] = useState(0)
 
   return (
     <>
@@ -81,9 +82,7 @@ function SheetDemo() {
         animation="medium"
         open={open}
         onOpenChange={setOpen}
-        snapPoints={[80]}
-        position={position}
-        onPositionChange={setPosition}
+        snapPointsMode="fit"
         dismissOnSnapToBottom
       >
         <Sheet.Overlay
@@ -93,21 +92,14 @@ function SheetDemo() {
           exitStyle={{ opacity: 0 }}
         />
         <Sheet.Handle bg="$color8" />
-        <Sheet.Frame items="center" justify="center" gap="$10" bg="$color2">
-          <XStack gap="$2">
-            <Paragraph text="center">Made by</Paragraph>
-            <Anchor color="$blue10" href="https://twitter.com/natebirdman" target="_blank">
-              @natebirdman,
-            </Anchor>
-            <Anchor
-              color="$blue10"
-              href="https://github.com/tamagui/tamagui"
-              target="_blank"
-              rel="noreferrer"
-            >
-              give it a ⭐️
-            </Anchor>
-          </XStack>
+        <Sheet.Frame items="center" justify="center" gap="$1" bg="$color2">
+          <Sheet.ScrollView>
+            {longArray.map((_, index) => (
+              <Paragraph key={index} text="center">
+                {index}
+              </Paragraph>
+            ))}
+          </Sheet.ScrollView>
 
           <Button
             size="$6"
